@@ -1,9 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/auth.js");
+const authRoutes = require("./routes/auth");
+const noteRoutes = require("./routes/notes");
 const client = require("./configs/db");
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/note", noteRoutes);
 
 app.listen(port, () => {
   console.log("hello");

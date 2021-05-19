@@ -1,31 +1,29 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const client = require("../configs/db");
 
-exports.signUp=(req,res) => {
+exports.signUp = (req, res) => {
   console.log("entered in signup mode");
-  const {name,email,password}=req.body;
+  const { name, email, password } = req.body;
 
   client
     .query(`SELECT * FROM details WHERE email = '${email}';`)
     .then((data) => {
-      isValid=data.rows;
+      isValid = data.rows;
 
-      if(isValid.length!==0) {
+      if (isValid.length !== 0) {
         res.status(400).json({
           error: "user already exists",
         });
       } else {
-
-        bcrypt.hash(password,10,(err,hash) => {
-
-          if(err) {
+        bcrypt.hash(password, 10, (err, hash) => {
+          if (err) {
             res.status(500).json({
               error: "internal server error occured",
             });
           }
 
-          const user= {
+          const user = {
             name,
             email,
             password: hash,
@@ -36,7 +34,7 @@ exports.signUp=(req,res) => {
               `INSERT INTO details (name, email, password) VALUES ('${user.name}', '${user.email}' , '${user.password}');`
             )
             .then((data) => {
-              const token=jwt.sign(
+              const token = jwt.sign(
                 {
                   email: email,
                 },
@@ -59,29 +57,29 @@ exports.signUp=(req,res) => {
     .catch((err) => {
       res.status(500).json({
         error: "Database error occured!",
-      })
-    })
+      });
+    });
 };
 
-exports.signIn=(req,res) => {
-  const {email,password} = req.body;
+exports.signIn = (req, res) => {
+  const { email, password } = req.body;
 
   client
     .query(`SELECT * FROM details WHERE email='${email}';`)
     .then((data) => {
-      userData=data.rows;
-      if(userData.length===0){
+      userData = data.rows;
+      if (userData.length === 0) {
         res.status(400).json({
           error: "user does not exist, signup instead!",
         });
       } else {
-        bcrypt.compare(password, userData[0].password, (err,result)=>{
-          if(err){
+        bcrypt.compare(password, userData[0].password, (err, result) => {
+          if (err) {
             res.status(500).json({
               error: "server error",
             });
-          } else if(result===true){
-            const token=jwt.sign(
+          } else if (result === true) {
+            const token = jwt.sign(
               {
                 email: email,
               },
@@ -91,7 +89,7 @@ exports.signIn=(req,res) => {
               message: "user signed in successfully",
               token: token,
             });
-          } else{
+          } else {
             res.status(400).json({
               error: "Enter correct password!",
             });
@@ -105,4 +103,3 @@ exports.signIn=(req,res) => {
       });
     });
 };
-
