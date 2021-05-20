@@ -3,7 +3,9 @@ const router = require("../routes/auth");
 const { addNote } = require("../routes/notes");
 const client = require("../configs/db");
 const routers = express.Router();
-
+const app = express();
+app.use(express.json());
+app.use(cors());
 exports.addNote = (req, res) => {
   const { heading, content } = req.body;
   client
