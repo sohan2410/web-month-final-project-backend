@@ -5,7 +5,6 @@ const authRoutes = require("./routes/auth");
 const noteRoutes = require("./routes/notes");
 const client = require("./configs/db");
 const app = express();
-const cors=require("cors");
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 8000;
