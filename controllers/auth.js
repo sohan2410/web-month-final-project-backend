@@ -1,7 +1,11 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const client = require("../configs/db");
-
+const express = require("express");
+const cors = require("cors");
+const app = express();
+app.use(express.json());
+app.use(cors());
 exports.signUp = (req, res) => {
   console.log("entered in signup mode");
   const { name, email, password } = req.body;

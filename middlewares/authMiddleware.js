@@ -1,6 +1,11 @@
 const { json } = require("express");
 const jwt = require("jsonwebtoken");
 const client = require("../configs/db");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+app.use(express.json());
+app.use(cors());
 exports.verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
