@@ -81,7 +81,7 @@ exports.deleteNoteId = (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(400).json({
-        message: "database error occured",
+        "message": "database error occured",
       });
     });
 };
